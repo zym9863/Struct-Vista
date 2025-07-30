@@ -1,3 +1,5 @@
+**中文** | [English](README_EN.md)
+
 # 数据结构视界 (Struct Vista)
 
 一个基于 Three.js 的交互式 3D 数据结构可视化应用，帮助用户直观地理解和探索各种数据结构及其算法。
