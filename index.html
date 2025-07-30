@@ -1,13 +1,83 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + TS</title>
+    <title>数据结构视界 - Struct Vista</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!-- 主容器 -->
+      <div id="main-container">
+        <!-- 控制面板 -->
+        <div id="control-panel">
+          <h2>数据结构视界</h2>
+
+          <!-- 数据结构选择 -->
+          <div class="section">
+            <h3>选择数据结构</h3>
+            <div class="structure-buttons">
+              <button id="btn-linked-list" class="structure-btn active">链表</button>
+              <button id="btn-binary-tree" class="structure-btn">二叉搜索树</button>
+              <button id="btn-graph" class="structure-btn">图</button>
+            </div>
+          </div>
+
+          <!-- 操作控制 -->
+          <div class="section">
+            <h3>操作控制</h3>
+            <div class="operation-controls">
+              <input type="number" id="input-value" placeholder="输入数值" />
+              <button id="btn-insert">插入</button>
+              <button id="btn-delete">删除</button>
+              <button id="btn-search">搜索</button>
+              <button id="btn-clear">清空</button>
+            </div>
+          </div>
+
+          <!-- 算法可视化控制 -->
+          <div class="section">
+            <h3>算法可视化</h3>
+            <div class="algorithm-controls">
+              <button id="btn-step-by-step">逐步执行</button>
+              <button id="btn-auto-play">自动播放</button>
+              <button id="btn-pause">暂停</button>
+              <button id="btn-reset">重置</button>
+            </div>
+
+            <!-- 图算法特殊控制 -->
+            <div id="graph-controls" class="graph-controls" style="display: none;">
+              <h4>图算法</h4>
+              <div class="graph-algorithm-controls">
+                <input type="number" id="start-node" placeholder="起始节点" />
+                <input type="number" id="end-node" placeholder="目标节点" />
+                <button id="btn-shortest-path">最短路径</button>
+                <button id="btn-add-edge">添加边</button>
+              </div>
+            </div>
+
+            <div class="speed-control">
+              <label>速度: </label>
+              <input type="range" id="animation-speed" min="1" max="10" value="5" />
+            </div>
+          </div>
+
+          <!-- 信息显示 -->
+          <div class="section">
+            <h3>信息</h3>
+            <div id="info-display">
+              <p>选择一个数据结构开始探索</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Three.js 渲染区域 -->
+        <div id="canvas-container">
+          <canvas id="three-canvas"></canvas>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
