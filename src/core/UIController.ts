@@ -23,6 +23,10 @@ export class UIController {
   private shortestPathBtn!: HTMLButtonElement
   private addEdgeBtn!: HTMLButtonElement
 
+  // 主题切换
+  private themeToggle!: HTMLButtonElement
+  private currentTheme: 'light' | 'dark' = 'dark'
+
   // 事件回调
   private onStructureSelectCallback?: (structureType: string) => void
   private onInsertCallback?: (value: number) => void
@@ -64,6 +68,9 @@ export class UIController {
     this.endNodeInput = document.getElementById('end-node') as HTMLInputElement
     this.shortestPathBtn = document.getElementById('btn-shortest-path') as HTMLButtonElement
     this.addEdgeBtn = document.getElementById('btn-add-edge') as HTMLButtonElement
+
+    // 主题切换按钮
+    this.themeToggle = document.getElementById('theme-toggle') as HTMLButtonElement
   }
 
   /**
@@ -72,6 +79,7 @@ export class UIController {
   public init(): void {
     this.setupEventListeners()
     this.updateButtonStates()
+    this.initializeTheme()
   }
 
   /**
@@ -176,6 +184,11 @@ export class UIController {
         this.insertBtn.click()
       }
     })
+
+    // 主题切换
+    this.themeToggle.addEventListener('click', () => {
+      this.toggleTheme()
+    })
   }
 
   /**
@@ -234,8 +247,43 @@ export class UIController {
   /**
    * 更新信息显示
    */
-  public updateInfo(message: string): void {
-    this.infoDisplay.innerHTML = `<p>${message}</p>`
+  public updateInfo(message: string, type: 'default' | 'success' | 'warning' | 'error' = 'default'): void {
+    // 清除之前的状态类
+    this.infoDisplay.classList.remove('success', 'warning', 'error')
+    
+    // 添加新的状态类
+    if (type !== 'default') {
+      this.infoDisplay.classList.add(type)
+    }
+
+    // 根据消息类型添加图标
+    let icon = ''
+    switch (type) {
+      case 'success':
+        icon = '<svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,11 12,14 22,4"/><path d="M21,12v7a2,2 0 0,1 -2,2H5a2,2 0 0,1 -2,-2V5a2,2 0 0,1 2,-2h11"/></svg>'
+        break
+      case 'warning':
+        icon = '<svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21,16-10,-16L1,16"/><path d="m12,9v4"/><path d="m12,17h.01"/></svg>'
+        break
+      case 'error':
+        icon = '<svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+        break
+      default:
+        icon = '<svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12,16v-4"/><path d="M12,8h.01"/></svg>'
+    }
+
+    this.infoDisplay.innerHTML = `
+      <div class="info-content">
+        ${icon}
+        <p>${message}</p>
+      </div>
+    `
+
+    // 添加淡入动画
+    this.infoDisplay.style.animation = 'none'
+    setTimeout(() => {
+      this.infoDisplay.style.animation = 'fadeIn 0.3s ease-out'
+    }, 10)
   }
 
   /**
@@ -346,5 +394,51 @@ export class UIController {
    */
   public onAddEdge(callback: (from: number, to: number) => void): void {
     this.onAddEdgeCallback = callback
+  }
+
+  /**
+   * 初始化主题
+   */
+  private initializeTheme(): void {
+    // 从本地存储加载主题设置
+    const savedTheme = localStorage.getItem('struct-vista-theme') as 'light' | 'dark'
+    if (savedTheme) {
+      this.currentTheme = savedTheme
+    }
+    
+    // 应用主题
+    this.applyTheme(this.currentTheme)
+  }
+
+  /**
+   * 切换主题
+   */
+  private toggleTheme(): void {
+    this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark'
+    this.applyTheme(this.currentTheme)
+    
+    // 保存到本地存储
+    localStorage.setItem('struct-vista-theme', this.currentTheme)
+  }
+
+  /**
+   * 应用主题
+   */
+  private applyTheme(theme: 'light' | 'dark'): void {
+    document.documentElement.setAttribute('data-theme', theme)
+    
+    // 更新信息显示，如果需要根据主题显示不同消息
+    if (theme === 'light') {
+      console.log('切换到浅色模式')
+    } else {
+      console.log('切换到深色模式')
+    }
+  }
+
+  /**
+   * 获取当前主题
+   */
+  public getCurrentTheme(): 'light' | 'dark' {
+    return this.currentTheme
   }
 }
